@@ -1,0 +1,32 @@
+@model ColegioSanJose.Models.Materia
+
+@{
+    ViewData["Title"] = "Eliminar Materia";
+}
+
+<h1>Eliminar Materia</h1>
+
+<h3>¿Estás seguro que quieres eliminar esta materia?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NombreMateria)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NombreMateria)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Docente)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Docente)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="MateriaId" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+    </form>
+</div>

@@ -1,0 +1,42 @@
+@model IEnumerable<ColegioSanJose.Models.Alumno>
+
+@{
+    ViewData["Title"] = "Alumnos";
+}
+
+<h1>Alumnos</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo Alumno</a>
+</p>
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha Nacimiento</th>
+            <th>Grado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                <td>@Html.DisplayFor(modelItem => item.Grado)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AlumnoId" class="btn btn-warning btn-sm">Editar</a>
+                    <a asp-action="Details" asp-route-id="@item.AlumnoId" class="btn btn-info btn-sm">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.AlumnoId" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Volver al Inicio</a>
+</div>
