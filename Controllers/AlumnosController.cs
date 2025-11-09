@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ColegioSanJose.Models;
 using System.Linq;
@@ -35,16 +35,51 @@ namespace ColegioSanJose.Controllers
             return View();
         }
 
+        //snippet debugger
+
+        //fin snippet
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlumnoId,Nombre,Apellido,FechaNacimiento,Grado")] Alumno alumno)
+        public async Task<IActionResult> Create(Alumno alumno)
         {
+            Console.WriteLine("DEBUG: Entrando al método Create");
+
+            // Remover la validación de la propiedad de navegación Expedientes
+            ModelState.Remove("Expedientes");
+
+            Console.WriteLine($"DEBUG: ModelState.IsValid = {ModelState.IsValid}");
+
             if (ModelState.IsValid)
             {
-                _context.Add(alumno);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    Console.WriteLine($"DEBUG: Datos del alumno - Nombre: {alumno.Nombre}, Apellido: {alumno.Apellido}, Fecha: {alumno.FechaNacimiento}, Grado: {alumno.Grado}");
+
+                    _context.Add(alumno);
+                    Console.WriteLine("DEBUG: Alumno agregado al contexto");
+
+                    int result = await _context.SaveChangesAsync();
+                    Console.WriteLine($"DEBUG: SaveChangesAsync retornó: {result} filas afectadas");
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR: {ex.Message}");
+                    Console.WriteLine($"ERROR Inner: {ex.InnerException?.Message}");
+                    ModelState.AddModelError("", $"Error al guardar: {ex.Message}");
+                }
             }
+            else
+            {
+                Console.WriteLine("DEBUG: ModelState no es válido");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"DEBUG Error: {error.ErrorMessage}");
+                }
+            }
+
             return View(alumno);
         }
 

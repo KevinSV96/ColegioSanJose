@@ -37,8 +37,10 @@ namespace ColegioSanJose.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MateriaId,NombreMateria,Docente")] Materia materia)
+        public async Task<IActionResult> Create(Materia materia)
         {
+            ModelState.Remove("Expedientes"); // Agregar esta línea
+
             if (ModelState.IsValid)
             {
                 _context.Add(materia);
@@ -60,9 +62,14 @@ namespace ColegioSanJose.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MateriaId,NombreMateria,Docente")] Materia materia)
+        public async Task<IActionResult> Edit(int id, Materia materia)
         {
-            if (id != materia.MateriaId) return NotFound();
+            if (id != materia.MateriaId)
+            {
+                return NotFound();
+            }
+
+            ModelState.Remove("Expedientes"); // Agregar esta línea
 
             if (ModelState.IsValid)
             {
@@ -73,8 +80,14 @@ namespace ColegioSanJose.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MateriaExists(materia.MateriaId)) return NotFound();
-                    else throw;
+                    if (!MateriaExists(materia.MateriaId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
                 return RedirectToAction(nameof(Index));
             }

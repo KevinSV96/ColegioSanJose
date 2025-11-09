@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ColegioSanJose.Models
 {
     public class Alumno
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AlumnoId { get; set; }
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
@@ -28,7 +26,8 @@ namespace ColegioSanJose.Models
         [StringLength(50)]
         public string Grado { get; set; }
 
-        public virtual ICollection<Expediente> Expedientes { get; set; }
+        // CAMBIO: Quitar virtual o hacerla nullable
+        public ICollection<Expediente> Expedientes { get; set; }
 
         public string NombreCompleto => $"{Nombre} {Apellido}";
     }
